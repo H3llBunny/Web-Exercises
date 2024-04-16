@@ -1,0 +1,13 @@
+﻿<section class="added-travels">
+    @foreach (BusStation.ViewModels.Destinations.DestinationViewModel destination in Model)
+    {
+        <div class="added-travel">
+            <img src=@destination.ImageUrl alt="" class="picture-added-travel">
+            <h3>From @destination.DestinationName to @destination.Origin</h3>
+            <span>Tickets #@destination.Tickets.Count</span>
+            <span>@destination.Date @destination.Time</span>
+            <a href="/Tickets/Create?destinationId=@destination.Id" class="addTickets">Add Tickets</a>
+            <a href="/Tickets/Reserve?destinationId=@destination.Id" class="bookTrip">Book a Trip</a>
+        </div>
+    }
+</section>

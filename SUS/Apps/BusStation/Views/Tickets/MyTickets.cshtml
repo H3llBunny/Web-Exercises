@@ -1,0 +1,17 @@
+﻿<main>
+    <h3>My Tickets</h3>
+    @foreach (BusStation.ViewModels.Tickets.TicketViewModel ticket in Model)
+    {
+        <section class="purchased-ticket">
+            <div class="purchased-left">
+                <img src=@ticket.TicketDestination.ImageUrl alt="">
+            </div>
+            <div class="purchased-right">
+                <div>
+                    <h3>From @ticket.TicketDestination.Origin to @ticket.TicketDestination.DestinationName</h3><span>@ticket.TicketDestination.Date @ticket.TicketDestination.Time</span>
+                </div>
+                <p>Ticket price: @ticket.Price euros</p>
+            </div>
+        </section>
+    }
+</main>
