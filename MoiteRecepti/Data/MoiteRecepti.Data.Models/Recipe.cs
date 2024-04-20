@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+
     using MoiteRecepti.Data.Common.Models;
 
     public class Recipe : BaseDeletableModel<int>
@@ -9,6 +10,7 @@
         public Recipe()
         {
             this.Ingredients = new HashSet<RecipeIngredient>();
+            this.Images = new HashSet<Image>();
         }
 
         public string Name { get; set; }
@@ -30,5 +32,7 @@
         public virtual Category Category { get; set; }
 
         public virtual ICollection<RecipeIngredient> Ingredients { get; set; }
+
+        public virtual ICollection<Image> Images { get; set; }
     }
 }

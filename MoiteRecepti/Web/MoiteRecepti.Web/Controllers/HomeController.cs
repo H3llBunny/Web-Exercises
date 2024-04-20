@@ -2,15 +2,34 @@
 {
     using System.Diagnostics;
 
-    using MoiteRecepti.Web.ViewModels;
-
     using Microsoft.AspNetCore.Mvc;
+    using MoiteRecepti.Services.Data;
+    using MoiteRecepti.Web.ViewModels;
+    using MoiteRecepti.Web.ViewModels.Home;
 
     public class HomeController : BaseController
     {
+        private readonly IGetCountsService countsService;
+
+        public HomeController(IGetCountsService countsService)
+        {
+            this.countsService = countsService;
+        }
+
         public IActionResult Index()
         {
-            return this.View();
+            var countsDto = this.countsService.GetCounts();
+
+            ////var viewModel = this.mapper.Map<IndexViewModel>(countsDto);
+
+            var viewModel = new IndexViewModel
+            {
+                CategoriesCount = countsDto.CategoriesCount,
+                ImagesCount = countsDto.ImagesCount,
+                IngredientsCount = countsDto.IngredientsCount,
+                RecipesCount = countsDto.RecipesCount,
+            };
+            return this.View(viewModel);
         }
 
         public IActionResult Privacy()
