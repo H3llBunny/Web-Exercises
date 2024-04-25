@@ -12,8 +12,8 @@ using MoiteRecepti.Data;
 namespace MoiteRecepti.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240417183217_AddedRecipesAndAllRelatedModels")]
-    partial class AddedRecipesAndAllRelatedModels
+    [Migration("20240423184644_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -295,6 +295,9 @@ namespace MoiteRecepti.Data.Migrations
                     b.Property<int>("RecipeId")
                         .HasColumnType("int");
 
+                    b.Property<string>("RemoteImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AddedByUserId");
@@ -367,6 +370,9 @@ namespace MoiteRecepti.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OriginalUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PortionsCount")
@@ -503,7 +509,7 @@ namespace MoiteRecepti.Data.Migrations
                         .HasForeignKey("AddedByUserId");
 
                     b.HasOne("MoiteRecepti.Data.Models.Recipe", "Recipe")
-                        .WithMany()
+                        .WithMany("Images")
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -570,6 +576,8 @@ namespace MoiteRecepti.Data.Migrations
 
             modelBuilder.Entity("MoiteRecepti.Data.Models.Recipe", b =>
                 {
+                    b.Navigation("Images");
+
                     b.Navigation("Ingredients");
                 });
 #pragma warning restore 612, 618
