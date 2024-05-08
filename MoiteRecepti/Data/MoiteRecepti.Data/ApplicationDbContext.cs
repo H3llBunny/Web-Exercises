@@ -11,6 +11,8 @@
 
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.AspNetCore.Identity;
+    using System.Reflection.Emit;
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
@@ -35,6 +37,8 @@
         public DbSet<Ingredient> Ingredients { get; set; }
 
         public DbSet<RecipeIngredient> RecipeIngredients { get; set; }
+
+        public DbSet<Vote> Votes { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 

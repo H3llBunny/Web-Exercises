@@ -12,8 +12,8 @@ using MoiteRecepti.Data;
 namespace MoiteRecepti.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240423184644_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240508082824_AddVotesForRecipes")]
+    partial class AddVotesForRecipes
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -289,8 +289,14 @@ namespace MoiteRecepti.Data.Migrations
                     b.Property<string>("AddedByUserId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Extension")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("RecipeId")
                         .HasColumnType("int");
@@ -451,6 +457,38 @@ namespace MoiteRecepti.Data.Migrations
                     b.ToTable("Settings");
                 });
 
+            modelBuilder.Entity("MoiteRecepti.Data.Models.Vote", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<byte>("Value")
+                        .HasColumnType("tinyint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecipeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Votes");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("MoiteRecepti.Data.Models.ApplicationRole", null)
@@ -555,6 +593,23 @@ namespace MoiteRecepti.Data.Migrations
                     b.Navigation("Recipe");
                 });
 
+            modelBuilder.Entity("MoiteRecepti.Data.Models.Vote", b =>
+                {
+                    b.HasOne("MoiteRecepti.Data.Models.Recipe", "Recipe")
+                        .WithMany()
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MoiteRecepti.Data.Models.ApplicationUser", "User")
+                        .WithMany("Votes")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Recipe");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("MoiteRecepti.Data.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Claims");
@@ -562,6 +617,8 @@ namespace MoiteRecepti.Data.Migrations
                     b.Navigation("Logins");
 
                     b.Navigation("Roles");
+
+                    b.Navigation("Votes");
                 });
 
             modelBuilder.Entity("MoiteRecepti.Data.Models.Category", b =>

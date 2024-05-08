@@ -2,6 +2,13 @@
 {
     using System.Reflection;
 
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
     using MoiteRecepti.Data;
     using MoiteRecepti.Data.Common;
     using MoiteRecepti.Data.Common.Repositories;
@@ -12,14 +19,6 @@
     using MoiteRecepti.Services.Mapping;
     using MoiteRecepti.Services.Messaging;
     using MoiteRecepti.Web.ViewModels;
-
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
 
     public class Program
     {
@@ -54,6 +53,10 @@
                 }).AddRazorRuntimeCompilation();
             services.AddRazorPages();
             services.AddDatabaseDeveloperPageExceptionFilter();
+            services.AddAntiforgery(options =>
+            {
+                options.HeaderName = "X-CSRF-TOKEN";
+            });
 
             services.AddSingleton(configuration);
 
@@ -67,7 +70,8 @@
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IGetCountsService, GetCountService>();
             services.AddTransient<ICategoriesService, CategoriesService>();
-            services.AddTransient<IRecipesService, RecipeService>();
+            services.AddTransient<IRecipesService, RecipesService>();
+            services.AddTransient<IVotesService, VotesService>();
         }
 
         private static void Configure(WebApplication app)
